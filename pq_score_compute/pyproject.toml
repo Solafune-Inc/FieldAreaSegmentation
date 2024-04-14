@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pq-score-compute"
+version = "0.1.0"
+description = "for compute pq score"
+authors = ["torumitsutake <toru.mitsutake@solafune.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "^1.26.4"
+tqdm = "^4.66.2"
+shapely = "^2.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
