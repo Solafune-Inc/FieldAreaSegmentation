@@ -22,8 +22,8 @@ def compute_pq(gt_polygons: list, pred_polygons: list, iou_threshold=0.5):
         best_iou = iou_threshold
         best_pred_idx = None
         for pred_idx, pred_polygon in enumerate(pred_polygons):
-            if gt_matched[gt_idx] == 1 or pred_matched[pred_idx] == 1:
-                continue
+            # if gt_matched[gt_idx] == 1 or pred_matched[pred_idx] == 1:
+            #     continue
             
             iou = getIOU(gt_polygon, pred_polygon)
             if iou == 0:
@@ -61,15 +61,37 @@ def test_compute_pq():
     pred_polygons = [polygon1, polygon2, polygon3, polygon7]
     
     pq, sq, rq = compute_pq(true_polygons, pred_polygons)
-    assert pq == 0.6
+    assert round(pq,1) == 0.7
     assert sq == 1
-    assert rq == 0.6
+    assert round(rq,1) == 0.7
     
 def test_get_iou():
     polygon1 = Polygon([(0, 0), (0, 1), (1, 1), (1, 0)])
     polygon2 = Polygon([(0, 0), (0, 1), (2, 1), (2, 0)])
     
     assert getIOU(polygon1, polygon2) == 0.5
+    
+def test_same_score_with_dif_order():
+    true_polygons = [
+        Polygon([(5, 5), (6, 6), (7, 5), (8, 4), (5, 3), (5, 5)]),
+        Polygon([(4, 4), (5, 6), (7, 7), (8, 5), (7, 4), (4, 4)]),
+        Polygon([(3, 3), (4, 5), (6, 5), (7, 3), (5, 2), (3, 3)]),
+    ]
+    pred_polygons = [
+        Polygon([(7, -3), (8, -2), (9, -3), (10, -4), (7, -5), (7, -3)]),
+        Polygon([(9, 8), (10, 10), (12, 11), (13, 9), (12, 8), (9, 8)]),
+        Polygon([(4, 4), (5, 6), (7, 6), (8, 4), (6, 3), (4, 4)]),
+    ]
+    true_order_1 = [1, 0, 2]
+    pred_order_1 = [0, 1, 2]
+    true_order_2 = [0, 1, 2]
+    pred_order_2 = [1, 0, 2]
+    pq1, sq1, rq1 = compute_pq([true_polygons[i] for i in true_order_1], [pred_polygons[i] for i in pred_order_1])
+    pq2, sq2, rq2 = compute_pq([true_polygons[i] for i in true_order_2], [pred_polygons[i] for i in pred_order_2])
+    
+    assert pq1 == pq2
+    assert sq1 == sq2
+    assert rq1 == rq2
     
     
     
