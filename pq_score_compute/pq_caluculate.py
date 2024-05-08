@@ -41,7 +41,7 @@ def compute_pq(gt_polygons: list, pred_polygons: list, iou_threshold=0.5):
     sq_sum = sum(matched_instances.values())
     num_matches = len(matched_instances)
     sq = sq_sum / num_matches if num_matches else 0
-    rq = num_matches / (len(gt_polygons) + ((len(pred_polygons) - num_matches)/2.0)) if (gt_polygons or pred_polygons) else 0
+    rq = num_matches / ((len(gt_polygons) + len(pred_polygons))/2.0) if (gt_polygons or pred_polygons) else 0
     pq = sq * rq
 
     return pq, sq, rq
@@ -61,9 +61,9 @@ def test_compute_pq():
     pred_polygons = [polygon1, polygon2, polygon3, polygon7]
     
     pq, sq, rq = compute_pq(true_polygons, pred_polygons)
-    assert round(pq,1) == 0.7
+    assert round(pq,1) == 0.8
     assert sq == 1
-    assert round(rq,1) == 0.7
+    assert round(rq,1) == 0.8
     
 def test_get_iou():
     polygon1 = Polygon([(0, 0), (0, 1), (1, 1), (1, 0)])
