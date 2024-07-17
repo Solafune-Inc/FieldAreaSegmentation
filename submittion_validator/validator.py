@@ -44,10 +44,10 @@ def check_dict(pdict : dict) -> str:
                 return "segmentation is not a list"
             
             if len(anno["segmentation"]) % 2 != 0:
-                return "segmentation format is invalid, the number of ssegmnets should be even"
+                return "segmentation format is invalid, the number of segments should be even"
             
             if len(anno["segmentation"]) < 4:
-                return "segmentation format is invalid, the number of segmnets should be at least 4"
+                return "segmentation format is invalid, the number of segments should be at least 4"
     
     if not len(image_names) == 0:
         return "Some images are missing"
